@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 15:01:14 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/04 18:31:24 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/05 14:15:19 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,6 @@ int	lstsize(t_lst *lst)
 	return (size);
 }
 
-t_lst	**lstat(t_lst **a, int i)
-{
-	if (i < 0)
-	{
-		i = lstsize(*a) + i;
-		if (i < 0)
-			return (NULL);
-		lstat(a, lstsize(*a) + i);
-	}
-	while (i--)
-		if (*a)
-			a = &(*a)->next;
-	else
-		return (NULL);
-	return (a);
-}
-
 t_lst	**lstlast(t_lst **lst)
 {
 	while (*lst && (*lst)->next)
@@ -65,4 +48,13 @@ void	lstclear(t_lst **lst)
 	lstclear(&(*lst)->next);
 	free(*lst);
 	*lst = NULL;
+}
+
+void	lstdel(t_lst **lst)
+{
+	t_lst	*temp;
+
+	temp = (*lst)->next;
+	free(*lst);
+	*lst = temp;
 }

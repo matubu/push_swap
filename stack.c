@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 14:58:50 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/04 17:31:43 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:27:47 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ t_stack	*stacknew(char **input)
 
 	stack = malloc(sizeof(t_stack));
 	if (stack == NULL)
+	{
+		err();
 		return (NULL);
+	}
 	stack->a = NULL;
 	while (*input)
 	{
@@ -38,6 +41,7 @@ t_stack	*stacknew(char **input)
 		}
 	}
 	stack->b = NULL;
+	stack->moves = NULL;
 	return (stack);
 }
 
@@ -45,5 +49,6 @@ void	stackclear(t_stack *stack)
 {
 	lstclear(&stack->a);
 	lstclear(&stack->b);
+	lstclear(&stack->moves);
 	free(stack);
 }

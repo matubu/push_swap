@@ -1,15 +1,16 @@
 #include "push_swap.h"
 
-void	lstswap(t_lst **a)
+t_lst	*lstswap(t_lst **a)
 {
 	int	v;
 
 	v = (*a)->v;
 	(*a)->v = (*a)->next->v;
 	(*a)->next->v = v;
+	return (*lstlast(a));
 }
 
-void	lstpush(t_lst **a, t_lst **b)
+t_lst	*lstpush(t_lst **a, t_lst **b)
 {
 	t_lst	*elm;
 
@@ -17,9 +18,10 @@ void	lstpush(t_lst **a, t_lst **b)
 	*a = (*a)->next;
 	elm->next = *b;
 	*b = elm;
+	return (*lstlast(a));
 }
 
-void	lstrotate(t_lst **a)
+t_lst	*lstrotate(t_lst **a)
 {
 	t_lst	*elm;
 
@@ -27,9 +29,10 @@ void	lstrotate(t_lst **a)
 	elm = *a;
 	*a = (*a)->next;
 	elm->next = NULL;
+	return (*lstlast(a));
 }
 
-void	lstrrotate(t_lst **a)
+t_lst	*lstrrotate(t_lst **a)
 {
 	t_lst	*elm;
 	t_lst	*last;
@@ -39,4 +42,6 @@ void	lstrrotate(t_lst **a)
 	elm = *a;
 	*a = last;
 	last->next = elm;
+	return (*lstlast(a));
 }
+

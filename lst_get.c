@@ -1,18 +1,19 @@
 #include "push_swap.h"
 
-int	lstgetclosest(t_lst *a, int v, t_lst **closest_elm)
+int	lstgetclosest(t_lst *a, int v)
 {
 	int		diff;
 	int		bestdiff;
 	int		best;
 	int		i;
+	int		fv;
 	
 	if (a == NULL)
 		return (0);
 	bestdiff = ft_abs(v - a->v);
-	i = 1;
+	fv = a->v;
 	best = 1;
-	*closest_elm = a;
+	i = 1;
 	while (a->next && i++)
 	{
 		a = a->next;
@@ -20,10 +21,12 @@ int	lstgetclosest(t_lst *a, int v, t_lst **closest_elm)
 		if (diff < bestdiff)
 		{
 			bestdiff = diff;
+			fv = a->v;
 			best = i;
-			*closest_elm = a;
 		}
 	}
+	if (fv > v)
+		best--;
 	return (best);
 }
 
@@ -49,4 +52,21 @@ int	lstgetsmallest(t_lst *a)
 	}
 	return (best);
 
+}
+
+t_lst	**lstat(t_lst **a, int i)
+{
+	if (i < 0)
+	{
+		i = lstsize(*a) + i;
+		if (i < 0)
+			return (NULL);
+		lstat(a, lstsize(*a) + i);
+	}
+	while (i--)
+		if (*a)
+			a = &(*a)->next;
+	else
+		return (NULL);
+	return (a);
 }

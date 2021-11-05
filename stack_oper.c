@@ -1,60 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack_oper.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/05 13:05:56 by mberger-          #+#    #+#             */
+/*   Updated: 2021/11/05 19:19:07 by mberger-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-/*
-void	swap(t_stack *stack);
-void	push(t_stack *stack);
-void	rotate(t_stack *stack);
-void	rrotate(t_stack *stack);*/
-/*
-void	swap(t_stack *stack, int ab)
+void	swap(t_stack *stack, enum e_action on)
 {
-	t_lst	*elm;
+	t_lst	*action;
 
-	if (ab & 0b10 && stack->a->next)
-	{
-		elm = stack->a->next;
-		stack->a->next = stack->a->next->next;
-		stack->a = elm;
-	}
-	if (ab & 0b01 && stack->b->next)
-	{
-		elm = stack->b->next;
-		stack->b->next = stack->b->next->next;
-		stack->b = elm;
-	}
-	if (ab & 0b11)
-		write(1, "ss\n", 3);
-	else if (ab & 0b10)
-		write(1, "sa\n", 3);
-	else if (ab & 0b01)
-		write(1, "sb\n", 3);
+	if (on & STACK_A)
+		lstswap(&stack->a);
+	if (on & STACK_B)
+		lstswap(&stack->b);
+	action = lstnew(SWAP | (on & STACK_BOTH));
+	DEBUG("swap()\n");
+	lstpush(&action, &stack->moves);
 }
 
-void	push(t_stack *stack, int ab)
+void	push(t_stack *stack, enum e_action on)
 {
-	t_lst	*elm;
+	t_lst	*action;
 
-	if (ab & 0b10 && stack->b)
+	if ((on & STACK_BOTH) == STACK_BOTH)
+		return ;
+	if (on & STACK_A)
 	{
-		elm = lstlast(stack->b);
-		elm->next = stack->a;
-		stack->a = elm;
+		lstpush(&stack->b, &stack->a);
+		action = lstnew(PUSH_A);
 	}
-	else if (ab & 0b01 && stack->a)
+	else if (on & STACK_B)
 	{
+		lstpush(&stack->a, &stack->b);
+		action = lstnew(PUSH_B);
 	}
-	if (ab & 0b10)
-		write(1, "pa\n", 3);
-	else if (ab & 0b01)
-		write(1, "pb\n", 3);
+	else
+		return ;
+	DEBUG("push()\n");
+	lstpush(&action, &stack->moves);
 }
 
-void	rotate(t_stack *stack, int ab)
+void	rotate(t_stack *stack, enum e_action on)
 {
+	t_lst	*action;
 
+	if (on & STACK_A)
+		lstrotate(&stack->a);
+	if (on & STACK_B)
+		lstrotate(&stack->b);
+	action = lstnew(ROTATE | (on & STACK_BOTH));
+	DEBUG("rotate()\n");
+	lstpush(&action, &stack->moves);
 }
 
-void	reverse_rotate(t_stack *stack, int ab)
+void	rrotate(t_stack *stack, enum e_action on)
 {
+	t_lst	*action;
 
-}*/
+	if (on & STACK_A)
+		lstrrotate(&stack->a);
+	if (on & STACK_B)
+		lstrrotate(&stack->b);
+	action = lstnew(RROTATE | (on & STACK_BOTH));
+	DEBUG("rrotate()\n");
+	lstpush(&action, &stack->moves);
+}
+
+void	rmove(t_stack *stack, int i)
+{
+	//int	size;
+
+	//size = lstsize(stack->a);
+	//if (i <= size  / 2)
+		while (i-- > 0)
+			rotate(stack, STACK_A);
+	//else
+	//	while (i++ < size)
+	//		rrotate(stack, STACK_A);
+}
