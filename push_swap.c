@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/04 19:06:39 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/05 10:30:55 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	err(void)
 {
 	write(2, "Error\n", 6);
-	while (1)
-		;
+	//while (1)
+	//	;
 	exit(1);
 }
 
@@ -24,6 +24,7 @@ void	err(void)
 
 void	print_stacks(t_stack *stack)
 {
+	(void)stack;
 	t_lst	*a;
 	t_lst	*b;
 
@@ -48,62 +49,83 @@ t_stack	*sort(char **input)
 {
 	t_stack *stack;
 	int		i;
+	int		closest;
+	t_lst	*closest_elm;
+	int		size;
 
 	stack = stacknew(input);
 
 	print_stacks(stack);
 
+	printf("step 1 (push to stack b)\n");
 	i = lstsize(stack->a);
-	while (i-- > 0)
+	while (i-- > 0 && stack->a->next)
 	{
 		if (stack->a->v > stack->a->next->v)
 		{
-			printf("push\n");
+			printf("pb\n");
 			lstpush(&stack->a, &stack->b);
 			print_stacks(stack);
 		}
 		else
 		{
-			printf("rotate\n");
+			printf("ra\n");
 			lstrotate(&stack->a);
 			print_stacks(stack);
 		}
+		if (i == 0)
+		{
+			if (stack->a->v > (*lstlast(&stack->a))->v
+					|| stack->a->v < stack->a->next->v)
+				break ;
+			printf("pb\n");
+			lstpush(&stack->a, &stack->b);
+			print_stacks(stack);
+		}
 	}
-
-/*
-	printf("swap\n");
-	lstswap(&stack->a);
-	push_swap(stack);
-	printf("swap\n");
-	lstswap(&stack->a);
-	push_swap(stack);
-
-	printf("push\n");
-	lstpush(&stack->b, &stack->a);
-	push_swap(stack);
-	printf("push\n");
-	lstpush(&stack->b, &stack->a);
-	push_swap(stack);
-
-	printf("rotate\n");
-	lstrotate(&stack->a);
-	push_swap(stack);
-	printf("rotate\n");
-	lstrotate(&stack->a);
-	push_swap(stack);
-
-	printf("rrotate\n");
-	lstrrotate(&stack->a);
-	push_swap(stack);
-	printf("rrotate\n");
-	lstrrotate(&stack->a);
-	push_swap(stack);
-*/
+	printf("step 2 (push back to stack a)\n");
+	i = lstsize(stack->b);
+	while (i-- > 0)
+	{
+		closest = lstgetclosest(stack->a, stack->b->v, &closest_elm);
+		if (closest_elm->v > stack->b->v)
+			closest--;
+		size = lstsize(stack->a);
+		if (closest <= size  / 2)
+			while (closest-- > 0)
+			{
+				printf("ra\n");
+				lstrotate(&stack->a);
+				print_stacks(stack);
+			}
+		else
+			while (closest++ < size)
+			{
+				printf("rra\n");
+				lstrrotate(&stack->a);
+				print_stacks(stack);
+			}
+		printf("pa\n");
+		lstpush(&stack->b, &stack->a);
+		print_stacks(stack);
+	}
+	printf("step 3 (recenter)\n");
+	i = lstgetsmallest(stack->a);
+	while (--i > 0)
+	{
+		printf("ra\n");
+		lstrotate(&stack->a);
+		print_stacks(stack);
+	}
+	//printf("sorting completed\n");
 	stackclear(stack);
+
+
+	//step 4 (optimize)
 	return (NULL);
 }
 
-//TODO error same value
+//TODO error with double values
 int	main(int argc, char **argv)
 {
 	int		len;
@@ -120,7 +142,7 @@ int	main(int argc, char **argv)
 	sort(input);
 	if (argc == 2)
 		free_splits(input, len);
-	while (1)
-		;
+	//while (1)
+	//	;
 	return (0);
 }

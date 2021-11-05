@@ -5,6 +5,7 @@
 # include <unistd.h>
 
 int		ft_atoi(const char *nptr, int *v);
+int		ft_abs(int v);
 
 char	**split(const char *s, char c, int *len);
 int		free_splits(char **splits, int n);
@@ -25,6 +26,9 @@ void	lstpush(t_lst **a, t_lst **b);
 void	lstrotate(t_lst **a);
 void	lstrrotate(t_lst **a);
 
+int		lstgetclosest(t_lst *a, int v, t_lst **closest_elm);
+int		lstgetsmallest(t_lst *a);
+
 typedef struct s_stack {
 	t_lst	*a;
 	t_lst	*b;
@@ -32,12 +36,12 @@ typedef struct s_stack {
 
 t_stack	*stacknew(char **input);
 void	stackclear(t_stack *stack);
-
+/*
 void	swap(t_stack *stack);
 void	push(t_stack *stack);
 void	rotate(t_stack *stack);
 void	rrotate(t_stack *stack);
-
+*/
 void	err(void);
 
 //lstget

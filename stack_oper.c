@@ -1,9 +1,10 @@
 #include "push_swap.h"
 
+/*
 void	swap(t_stack *stack);
 void	push(t_stack *stack);
 void	rotate(t_stack *stack);
-void	rrotate(t_stack *stack);
+void	rrotate(t_stack *stack);*/
 /*
 void	swap(t_stack *stack, int ab)
 {

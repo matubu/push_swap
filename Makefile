@@ -1,6 +1,6 @@
 NAME = push_swap
 
-OBJ = bin/push_swap.o bin/split.o bin/lst.o bin/stack.o bin/ft_atoi.o bin/stack_oper.o bin/lst_oper.o
+OBJ = bin/push_swap.o bin/split.o bin/lst.o bin/stack.o bin/math.o bin/stack_oper.o bin/lst_oper.o bin/lst_get.o
 
 BIN = bin
 FLAGS = -Wall -Wextra -Werror
