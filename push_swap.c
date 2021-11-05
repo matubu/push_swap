@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/05 10:30:55 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/05 10:34:54 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_stack	*sort(char **input)
 			lstrotate(&stack->a);
 			print_stacks(stack);
 		}
-		if (i == 0)
+		if (i == -1)
 		{
 			if (stack->a->v > (*lstlast(&stack->a))->v
 					|| stack->a->v < stack->a->next->v)
