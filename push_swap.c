@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 17:28:30 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 18:09:29 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,14 @@ void	print_moves(t_lst *moves)
 int	calc(int a, int b, int same)
 {
 	if (same)
-		return (ft_abs(a - b));
+	{
+		if (a > b)
+			return (a);
+		return (b);
+	}
 	return (a + b);
 }
-/*
-//take in acount dobble moves
+
 int	getcost(t_stack *stack, int bi)
 {
 	int	ai;
@@ -131,26 +134,7 @@ int	getcost(t_stack *stack, int bi)
 		mn = ai;
 	else
 		mn = size - ai;
-	//return (mn + ft_abs(bi));
-	size = lstsize(stack->b);
-	bi = ft_abs(bi);
-	if (bi < size / 2)
-		return (calc(mn, bi, backward == 0));
-	else
-		return (calc(mn, bi, backward == 1));
-}
-*/
-int	getcost(t_lst *lst, int v)
-{
-	int	i;
-	int	size;
-	
-	i = lstgetclosest(lst, v);
-	size = lstsize(lst);
-	if (i < size / 2)
-		return (i);
-	else
-		return (size - i);
+	return (calc(mn, ft_abs(bi), (bi < 0) == backward));
 }
 
 void	find_lower_cost(t_stack *stack)
@@ -161,8 +145,7 @@ void	find_lower_cost(t_stack *stack)
 
 	i = -1;
 	while (++i < MAX)
-		//c[i] = getcost(stack, i - HALF);
-		c[i] = getcost(stack->a, lstvat(stack->b, i - HALF)) + ft_abs(i - HALF);
+		c[i] = getcost(stack, i - HALF);
 	i = -1;
 	while (++i < MAX)
 	{
