@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 15:01:08 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/05 08:33:09 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 12:36:49 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@ int	ft_atoi(const char *nptr, int *v)
 	if (*nptr == '-' || *nptr == '+')
 		nptr++;
 	while (*nptr >= '0' && *nptr <= '9')
-		*v = *v * 10 - *nptr++ + '0';
+		if (*v * 10 - *nptr + '0' > *v)
+			return (1);
+		else
+			*v = *v * 10 - *nptr++ + '0';
+	if (!neg && *v < --*v)
+			return (1);
 	if (!neg)
 		*v = -*v;
 	if (*nptr)

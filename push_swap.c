@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 12:05:33 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 16:16:16 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,32 +41,46 @@ int	optimize_moves(t_lst **moves)
 		return (0);
 	while (optimize_moves(&(*moves)->next))
 		b = 1;
-	if (mid(*moves, 2) == (PUSH_B | PUSH_A << 6) 
+	if (mid(*moves, 2) == (ROTATE_B | ROTATE_A << 6)
+			|| mid(*moves, 2) == (ROTATE_A | ROTATE_B << 6))
+	{
+		DEBUG(">> rr\n");
+		lstdel(moves);
+		(*moves)->v = ROTATE_BOTH;
+	}
+	else if (mid(*moves, 2) == (RROTATE_B | RROTATE_A << 6)
+			|| mid(*moves, 2) == (RROTATE_A | RROTATE_B << 6))
+	{
+		DEBUG(">> rrr\n");
+		lstdel(moves);
+		(*moves)->v = RROTATE_BOTH;
+	}
+	else if (mid(*moves, 2) == (PUSH_B | PUSH_A << 6) 
 			|| mid(*moves, 2) == (PUSH_A | PUSH_B << 6)
 			|| mid(*moves, 2) == (ROTATE_A | RROTATE_A << 6)
 			|| mid(*moves, 2) == (RROTATE_A | ROTATE_A << 6))
 	{
-		DEBUG("pb pa | pa pb | ra rra | rra ra -> (null)\n");
+		DEBUG(">> usless\n");
 		lstdel(moves);
 		lstdel(moves);
 	}
 	else if (mid(*moves, 3) == (PUSH_B | ROTATE_A << 6 | PUSH_A << 12))
 	{
-		DEBUG("pb ra pa -> sa ra\n");
+		DEBUG(">> pb ra pa\n");
 		lstdel(moves);
 		(*moves)->next->v = SWAP_A;
 		(*moves)->v = ROTATE_A;
 	}
 	else if (mid(*moves, 3) == (ROTATE_A | PUSH_A << 6 | RROTATE_A << 12))
 	{
-		DEBUG("ra pa rra -> pa sa\n");
+		DEBUG(">> ra pa rra\n");
 		lstdel(moves);
 		(*moves)->next->v = PUSH_A;
 		(*moves)->v = SWAP_A;
 	}
 	else if (mid(*moves, 4) == (PUSH_B | SWAP_A << 6 | PUSH_A << 12 | ROTATE_A << 18))
 	{
-		DEBUG("pb sa pa ra -> ra sa\n");
+		DEBUG(">> pb sa pa ra\n");
 		lstdel(moves);
 		lstdel(moves);
 		(*moves)->next->v = ROTATE_A;
@@ -74,7 +88,7 @@ int	optimize_moves(t_lst **moves)
 	}
 	else if (mid(*moves, 4) == (ROTATE_A | PUSH_B << 6 | RROTATE_A << 12 | PUSH_A << 18))
 	{
-		DEBUG("ra pb rra pa -> sa\n");
+		DEBUG(">> ra pb rra pa\n");
 		lstdel(moves);
 		lstdel(moves);
 		lstdel(moves);
@@ -106,6 +120,15 @@ void	print_moves(t_lst *moves)
 	write(1, "\n", 1);
 }
 
+# define MAX 81
+# define HALF 40
+
+//take in acount dobble moves
+/*int	getcost(t_stack *stack, int i)
+{
+	
+}*/
+
 int	getcost(t_lst *lst, int v)
 {
 	int	i;
@@ -113,7 +136,7 @@ int	getcost(t_lst *lst, int v)
 	
 	i = lstgetclosest(lst, v);
 	size = lstsize(lst);
-	if (i <= size  / 2)
+	if (i < size / 2)
 		return (i);
 	else
 		return (size - i);
@@ -121,43 +144,31 @@ int	getcost(t_lst *lst, int v)
 
 void	find_lower_cost(t_stack *stack)
 {
-	int		c[7];
+	int		c[MAX];
+	int		i;
+	int		j;
 
-	c[0] = getcost(stack->a, stack->b->v);
-	c[1] = getcost(stack->a, lstvat(stack->b, 1)) + 1;
-	c[2] = getcost(stack->a, lstvat(stack->b, 2)) + 2;
-	c[3] = getcost(stack->a, lstvat(stack->b, 3)) + 3;
-	c[4] = getcost(stack->a, lstvat(stack->b, -1)) + 1;
-	c[5] = getcost(stack->a, lstvat(stack->b, -2)) + 2;
-	c[6] = getcost(stack->a, lstvat(stack->b, -3)) + 3;
-
-	if (c[0] <= c[1] && c[0] <= c[2] && c[0] <= c[3] && c[0] <= c[4] && c[0] <= c[5] && c[0] <= c[6])
-		return ;
-	if (c[1] <= c[2] && c[1] <= c[3] && c[1] <= c[4] && c[1] <= c[5] && c[1] <= c[6])
-		swap(stack, STACK_B);
-	else if(c[2] <= c[3] && c[2] <= c[4] && c[2] <= c[5] && c[2] <= c[6])
+	i = -1;
+	while (++i < MAX)
+		//c[i] = getcost(stack, i - HALF);
+		c[i] = getcost(stack->a, lstvat(stack->b, i - HALF)) + ft_abs(i - HALF);
+	i = -1;
+	while (++i < MAX)
 	{
-		rotate(stack, STACK_B);
-		rotate(stack, STACK_B);
-	}
-	else if(c[3] <= c[4] && c[3] <= c[5] && c[3] <= c[6])
-	{
-		rotate(stack, STACK_B);
-		rotate(stack, STACK_B);
-		rotate(stack, STACK_B);
-	}
-	else if (c[4] <= c[5] && c[4] <= c[6])
-		rrotate(stack, STACK_B);
-	else if (c[5] <= c[6])
-	{
-		rrotate(stack, STACK_B);
-		rrotate(stack, STACK_B);
-	}
-	else
-	{
-		rrotate(stack, STACK_B);
-		rrotate(stack, STACK_B);
-		rrotate(stack, STACK_B);
+		j = i;
+		while (++j < MAX)
+			if (c[i] > c[j])
+				break ;
+		if (j == MAX)
+		{
+			if (i < HALF)
+				while (i++ < HALF)
+					rrotate(stack, STACK_B);
+			else if (i > HALF)
+				while (i-- > HALF)
+					rotate(stack, STACK_B);
+			return ;
+		}
 	}
 }
 
@@ -168,17 +179,20 @@ void	sort(t_stack *stack)
 
 	DEBUG("\t-> 0 (push to stack b)\n");
 	i = lstsize(stack->a);
+	if (i <= 3)
+		i--;
 	rotate(stack, STACK_A);
-	while (i-- > 1)//2)
-		//try to push closer to a similar number
+	while (i-- > 1)
 		if ((*lstlast(&stack->a))->v > stack->a->v)
 			push(stack, STACK_B);
+			//TODO presort
 		else
 			rotate(stack, STACK_A);
 	DEBUG("\t-> 1 (push back to stack a)\n");
 	while (stack->b)
 	{
-		find_lower_cost(stack);
+		if (lstsize(stack->a) > 10)
+			find_lower_cost(stack);
 		closest = lstgetclosest(stack->a, stack->b->v);
 		rmove(stack, closest);
 		push(stack, STACK_A);
@@ -223,7 +237,7 @@ t_stack	*push_swap(char **input)
 
 //TODO error with double values
 //TODO multiple spaces
-//TODO maxint
+//TODO maxint fail
 //TODO double move
 //TODO push a, push a vs swap push a push a
 int	main(int argc, char **argv)

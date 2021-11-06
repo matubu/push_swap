@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 13:05:56 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 10:38:46 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 13:34:12 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	rmove(t_stack *stack, int i)
 	int	size;
 
 	size = lstsize(stack->a);
-	if (i <= size  / 2)
+	if (i < size  / 2)
 		while (i-- > 0)
 			rotate(stack, STACK_A);
 	else

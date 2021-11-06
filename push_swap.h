@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 12:06:17 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 11:25:14 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 15:40:43 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**split(const char *s, char c, int *len);
 int		free_splits(char **splits, int n);
 
 typedef struct s_lst {
-	int				v;
+	int			v;
 	struct s_lst	*next;
 }	t_lst;
 
