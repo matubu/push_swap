@@ -6,23 +6,39 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 13:05:56 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 13:34:12 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 17:31:01 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+void	push_move(t_stack *stack, enum e_action both, enum e_action act,
+		enum e_action with)
+{
+	t_lst	*move;
+	t_lst	*moves;
+
+	moves = stack->moves;
+	if (moves)
+		while (moves->v == (int)both)
+			moves = moves->next;
+	if (moves && moves->v == (int)with)
+		moves->v = both;
+	else
+	{
+		move = lstnew(act);
+		lstpush(&move, &stack->moves);
+	}
+}
+
 void	swap(t_stack *stack, enum e_action on)
 {
-	t_lst	*action;
-
 	if (on & STACK_A)
 		lstswap(&stack->a);
 	if (on & STACK_B)
 		lstswap(&stack->b);
-	action = lstnew(SWAP | (on & STACK_BOTH));
-	DEBUG("\t\tswap()\n");
-	lstpush(&action, &stack->moves);
+	push_move(stack, SWAP_BOTH, (on & STACK_BOTH) | SWAP,
+			((on ^ STACK_BOTH) & STACK_BOTH) | SWAP);
 }
 
 void	push(t_stack *stack, enum e_action on)
@@ -43,34 +59,27 @@ void	push(t_stack *stack, enum e_action on)
 	}
 	else
 		return ;
-	DEBUG("\t\tpush()\n");
 	lstpush(&action, &stack->moves);
 }
 
 void	rotate(t_stack *stack, enum e_action on)
 {
-	t_lst	*action;
-
 	if (on & STACK_A)
 		lstrotate(&stack->a);
 	if (on & STACK_B)
 		lstrotate(&stack->b);
-	action = lstnew(ROTATE | (on & STACK_BOTH));
-	DEBUG("\t\trotate()\n");
-	lstpush(&action, &stack->moves);
+	push_move(stack, ROTATE_BOTH, (on & STACK_BOTH) | ROTATE,
+			((on ^ STACK_BOTH) & STACK_BOTH) | ROTATE);
 }
 
 void	rrotate(t_stack *stack, enum e_action on)
 {
-	t_lst	*action;
-
 	if (on & STACK_A)
 		lstrrotate(&stack->a);
 	if (on & STACK_B)
 		lstrrotate(&stack->b);
-	action = lstnew(RROTATE | (on & STACK_BOTH));
-	DEBUG("\t\trrotate()\n");
-	lstpush(&action, &stack->moves);
+	push_move(stack, RROTATE_BOTH, (on & STACK_BOTH) | RROTATE,
+			((on ^ STACK_BOTH) & STACK_BOTH) | RROTATE);
 }
 
 void	rmove(t_stack *stack, int i)

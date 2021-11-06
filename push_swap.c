@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 16:16:16 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 17:28:30 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,7 @@ int	optimize_moves(t_lst **moves)
 		return (0);
 	while (optimize_moves(&(*moves)->next))
 		b = 1;
-	if (mid(*moves, 2) == (ROTATE_B | ROTATE_A << 6)
-			|| mid(*moves, 2) == (ROTATE_A | ROTATE_B << 6))
-	{
-		DEBUG(">> rr\n");
-		lstdel(moves);
-		(*moves)->v = ROTATE_BOTH;
-	}
-	else if (mid(*moves, 2) == (RROTATE_B | RROTATE_A << 6)
-			|| mid(*moves, 2) == (RROTATE_A | RROTATE_B << 6))
-	{
-		DEBUG(">> rrr\n");
-		lstdel(moves);
-		(*moves)->v = RROTATE_BOTH;
-	}
-	else if (mid(*moves, 2) == (PUSH_B | PUSH_A << 6) 
+	if (mid(*moves, 2) == (PUSH_B | PUSH_A << 6) 
 			|| mid(*moves, 2) == (PUSH_A | PUSH_B << 6)
 			|| mid(*moves, 2) == (ROTATE_A | RROTATE_A << 6)
 			|| mid(*moves, 2) == (RROTATE_A | ROTATE_A << 6))
@@ -123,12 +109,37 @@ void	print_moves(t_lst *moves)
 # define MAX 81
 # define HALF 40
 
-//take in acount dobble moves
-/*int	getcost(t_stack *stack, int i)
+int	calc(int a, int b, int same)
 {
-	
-}*/
+	if (same)
+		return (ft_abs(a - b));
+	return (a + b);
+}
+/*
+//take in acount dobble moves
+int	getcost(t_stack *stack, int bi)
+{
+	int	ai;
+	int	mn;
+	int	size;
+	int	backward;
 
+	ai = lstgetclosest(stack->a, lstvat(stack->b, bi));
+	size = lstsize(stack->a);
+	backward = 1;
+	if (ai < size / 2 && backward--)
+		mn = ai;
+	else
+		mn = size - ai;
+	//return (mn + ft_abs(bi));
+	size = lstsize(stack->b);
+	bi = ft_abs(bi);
+	if (bi < size / 2)
+		return (calc(mn, bi, backward == 0));
+	else
+		return (calc(mn, bi, backward == 1));
+}
+*/
 int	getcost(t_lst *lst, int v)
 {
 	int	i;
