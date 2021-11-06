@@ -61,7 +61,6 @@ t_lst	**lstat(t_lst **a, int i)
 		i = lstsize(*a) + i;
 		if (i < 0)
 			return (NULL);
-		lstat(a, lstsize(*a) + i);
 	}
 	while (i--)
 		if (*a)
@@ -69,4 +68,25 @@ t_lst	**lstat(t_lst **a, int i)
 	else
 		return (NULL);
 	return (a);
+}
+
+int	lstvat(t_lst *a, int i)
+{
+	int	v;
+
+	v = a->v;
+	if (i < 0)
+	{
+		i = lstsize(a) + i;
+		if (i < 0)
+			return (v);
+	}
+	while (i--)
+		if (a)
+			a = a->next;
+		else
+			break ;
+	if (a == NULL)
+		return (v);
+	return (a->v);
 }

@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 12:06:17 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/05 18:48:14 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 11:25:14 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@ t_lst	**lstlast(t_lst **lst);
 void	lstclear(t_lst **lst);
 void	lstdel(t_lst **lst);
 
-t_lst	*lstswap(t_lst **a);
-t_lst	*lstpush(t_lst **a, t_lst **b);
-t_lst	*lstrotate(t_lst **a);
-t_lst	*lstrrotate(t_lst **a);
+void	lstswap(t_lst **a);
+void	lstpush(t_lst **a, t_lst **b);
+void	lstrotate(t_lst **a);
+void	lstrrotate(t_lst **a);
 
 int		lstgetclosest(t_lst *a, int v);
 int		lstgetsmallest(t_lst *a);
 t_lst	**lstat(t_lst **a, int i);
+int		lstvat(t_lst *a, int i);
 
 typedef struct s_stack {
 	t_lst	*a;
@@ -89,6 +90,6 @@ void	err(void);
 #include <stdio.h>
 
 #define DEBUG_MODE 0
-#define DEBUG(s) DEBUG_MODE?printf(s):(void)s
+#define DEBUG(...) DEBUG_MODE?printf(__VA_ARGS__):(void)NULL
 
 #endif
