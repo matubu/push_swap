@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 12:06:17 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 10:46:52 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 12:01:29 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int		lstgetclosest(t_lst *a, int v);
 int		lstgetsmallest(t_lst *a);
 t_lst	**lstat(t_lst **a, int i);
 int		lstvat(t_lst *a, int i);
+int		lstcontains(t_lst *a, int v);
 
 typedef struct s_stack {
 	t_lst	*a;

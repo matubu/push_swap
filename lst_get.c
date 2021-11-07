@@ -90,3 +90,14 @@ int	lstvat(t_lst *a, int i)
 		return (v);
 	return (a->v);
 }
+
+int	lstcontains(t_lst *a, int v)
+{
+	while (a)
+	{
+		if (a->v == v)
+			return (1);
+		a = a->next;
+	}
+	return (0);
+}

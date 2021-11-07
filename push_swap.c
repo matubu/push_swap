@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 11:40:48 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 12:10:19 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,12 +206,10 @@ void	sort(t_stack *stack)
 	if (issorted(stack->a))
 		return ;
 	while (i-- > 1)
-	{
 		if ((*lstlast(&stack->a))->v > stack->a->v)//smarter push or not + presort
 			push(stack, STACK_B);
 		else
 			rotate(stack, STACK_A);
-	}
 	DEBUG("\t-> 1 (push back to stack a)\n");
 	while (stack->b)
 	{
@@ -256,8 +254,7 @@ void	push_swap(char **input)
 	stackclear(&stack);
 }
 
-//TODO error with double values
-//TODO maxint + minint fail
+//TODO check leaks
 int	main(int argc, char **argv)
 {
 	int		len;
