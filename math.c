@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 15:01:08 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 15:26:33 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 16:56:20 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	ft_atoi(const char *nptr, int *v)
 			return (1);
 	else
 		*v = *v * 10 - *nptr++ + '0';
+	if (!neg && *v < *v - 1)
+		return (1);
 	if (!neg)
 		*v = -*v;
 	if (*nptr)

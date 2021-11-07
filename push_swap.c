@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 15:21:48 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 16:47:41 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	push_swap(char **input, int len)
 	t_stack	stack;
 
 	stacknew(input, len, &stack);
+	if (len < 2)
+		return ;
 	if (!issorted(stack.a))
 		sort(&stack);
 	optimize_moves(&stack.moves);
@@ -81,6 +83,7 @@ void	push_swap(char **input, int len)
 }
 
 //TODO check leaks
+//TODO error if ./ maxint
 int	main(int argc, char **argv)
 {
 	int		len;
@@ -92,7 +95,7 @@ int	main(int argc, char **argv)
 	input = argv + 1;
 	if (argc == 2)
 		input = split(argv[1], ' ', &len);
-	if (!input || len < 2)
+	if (!input || len < 1)
 		return (1);
 	push_swap(input, len);
 	if (argc == 2)
