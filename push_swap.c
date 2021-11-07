@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 18:09:29 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 09:46:21 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,28 @@ void	find_lower_cost(t_stack *stack)
 		}
 	}
 }
+/*
+int	isrestsorted(t_lst *lst, int i)
+{
+	while (lst && i--)
+	{
+		if (lst->next && lst->v < lst->next->v)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
+*/
+int	issorted(t_lst *lst)
+{
+	while (lst)
+	{
+		if (lst->next && lst->v > lst->next->v)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
 
 void	sort(t_stack *stack)
 {
@@ -175,13 +197,22 @@ void	sort(t_stack *stack)
 	i = lstsize(stack->a);
 	if (i <= 3)
 		i--;
-	rotate(stack, STACK_A);
-	while (i-- > 1)
+	if (stack->a->v > stack->a->next->v)
+		swap(stack, STACK_A);
+	if (issorted(stack->a))
+		return ;
+	rotate(stack, STACK_A);//avoid rotate and try swap ...
+	rotate(stack, STACK_A);//avoid rotate and try swap ...
+	while (i-- > 2)
+	{
+		//if (stack->a->v > stack->a->next->v)
+		//	swap(stack, STACK_A);
 		if ((*lstlast(&stack->a))->v > stack->a->v)
 			push(stack, STACK_B);
 			//TODO presort
-		else
+		else// if (!isrestsorted(stack->a, i))
 			rotate(stack, STACK_A);
+	}
 	DEBUG("\t-> 1 (push back to stack a)\n");
 	while (stack->b)
 	{
@@ -196,15 +227,13 @@ void	sort(t_stack *stack)
 
 }
 
-int	issorted(t_lst *lst)
+void	write_tab(t_lst *a)
 {
-	while (lst)
+	while (a)
 	{
-		if (lst->next && lst->v > lst->next->v)
-			return (0);
-		lst = lst->next;
+		DEBUG("-> | %i\n", a->v);
+		a = a->next;
 	}
-	return (1);
 }
 
 t_stack	*push_swap(char **input)
@@ -213,6 +242,7 @@ t_stack	*push_swap(char **input)
 
 	DEBUG("step 0 (create stack)\n");
 	stack = stacknew(input);
+	write_tab(stack->a);
 	DEBUG("step 1 (sort)\n");
 	if (!issorted(stack->a))
 		sort(stack);
@@ -232,8 +262,6 @@ t_stack	*push_swap(char **input)
 //TODO error with double values
 //TODO multiple spaces
 //TODO maxint fail
-//TODO double move
-//TODO push a, push a vs swap push a push a
 int	main(int argc, char **argv)
 {
 	int		len;

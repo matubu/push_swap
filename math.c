@@ -6,9 +6,11 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 15:01:08 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/06 12:36:49 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/06 18:45:37 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "push_swap.h"
 
 int	ft_atoi(const char *nptr, int *v)
 {
@@ -25,8 +27,6 @@ int	ft_atoi(const char *nptr, int *v)
 			return (1);
 		else
 			*v = *v * 10 - *nptr++ + '0';
-	if (!neg && *v < --*v)
-			return (1);
 	if (!neg)
 		*v = -*v;
 	if (*nptr)
