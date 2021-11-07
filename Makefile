@@ -1,10 +1,12 @@
-NAME = push_swap
-
-SRCS = push_swap split lst stack math stack_oper lst_oper lst_get optimize cost
-OBJ = $(foreach src,$(SRCS),bin/$(src).o)
-
 BIN = bin
 FLAGS = -Wall -Wextra -Werror 
+
+SRCS = split lst stack math stack_oper lst_oper lst_get optimize cost str
+MANDATORY = push_swap
+BONUS = checker
+OBJ_BOTH = $(foreach src,$(SRCS),$(BIN)/$(src).o)
+
+NAME = $(MANDATORY)
 
 ECHO = echo
 RED = \033[31m
@@ -17,13 +19,12 @@ all: $(NAME)
 
 bin/%.o: %.c
 	@$(ECHO) "$(BLU)● Compiling $^ 🔧$(EOC)"
-	@rm -rf $(NAME) $(OBJ_UNUSED)
 	@mkdir -p $(BIN)
 	@gcc $(FLAGS) -c $^ -o $@
 
-$(NAME): $(OBJ)
-	@$(ECHO) "$(GRE)● Compiling to binary ⚙️ $(EOC)"
-	@gcc $(FLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ_BOTH) $(BIN)/$(MANDATORY).o
+	@$(ECHO) "$(GRE)● Compiling $@ ⚙️ $(EOC)"
+	@gcc $(FLAGS) $^ -o $@
 
 clean:
 	@$(ECHO) "$(RED)● Removing /$(BIN) 📁$(EOC)"
@@ -31,9 +32,15 @@ clean:
 
 fclean: clean
 	@$(ECHO) "$(RED)● Removing binary ⚙️ $(EOC)"
-	@rm -rf $(NAME)
+	@rm -rf $(MANDATORY) $(BONUS)
 
 re: fclean all
+
+bonus: $(BONUS)
+
+$(BONUS): $(OBJ_BOTH)  $(BIN)/$(BONUS).o
+	@$(ECHO) "$(GRE)● Compiling $@ ⚙️ $(EOC)"
+	@gcc $(FLAGS) $^ -o $@
 
 score: all
 	@./push_swap 9 8 6 1 7 | wc -l
@@ -43,4 +50,4 @@ score: all
 	@./push_swap `ruby -e "puts (1..100).to_a.shuffle.join(' ')"` | wc -l
 	@./push_swap `ruby -e "puts (1..500).to_a.shuffle.join(' ')"` | wc -l
 
-.PHONY: all bonus clean fclean re
+.PHONY: all bonus clean fclean re bonus score

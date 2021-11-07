@@ -6,13 +6,13 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 14:58:50 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 12:12:37 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 14:33:53 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_stack	*stacknew(char **input, t_stack	*stack)
+void	stacknew(char **input, int i, t_stack	*stack)
 {
 	int		e;
 	int		n;
@@ -21,7 +21,7 @@ t_stack	*stacknew(char **input, t_stack	*stack)
 	stack->a = NULL;
 	stack->b = NULL;
 	stack->moves = NULL;
-	while (*input)
+	while (i--)
 	{
 		e = ft_atoi(*input++, &n);
 		elm = lstnew(n);
@@ -36,7 +36,6 @@ t_stack	*stacknew(char **input, t_stack	*stack)
 		else
 			(*lstlast(&stack->a))->next = elm;
 	}
-	return (stack);
 }
 
 void	stackclear(t_stack *stack)

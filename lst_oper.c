@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 12:16:25 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 13:38:42 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 15:20:31 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	lstswap(t_lst **a)
 {
 	int	v;
 
+	if (!*a || !(*a)->next)
+		return ;
 	v = (*a)->v;
 	(*a)->v = (*a)->next->v;
 	(*a)->next->v = v;
@@ -25,6 +27,8 @@ void	lstpush(t_lst **a, t_lst **b)
 {
 	t_lst	*elm;
 
+	if (!*a)
+		return ;
 	elm = *a;
 	*a = (*a)->next;
 	elm->next = *b;
@@ -35,6 +39,8 @@ void	lstrotate(t_lst **a)
 {
 	t_lst	*elm;
 
+	if (!*a || !(*a)->next)
+		return ;
 	(*lstlast(a))->next = *a;
 	elm = *a;
 	*a = (*a)->next;
@@ -46,6 +52,8 @@ void	lstrrotate(t_lst **a)
 	t_lst	*elm;
 	t_lst	*last;
 
+	if (!*a || !(*a)->next)
+		return ;
 	last = *lstlast(a);
 	*lstat(a, -1) = NULL;
 	elm = *a;

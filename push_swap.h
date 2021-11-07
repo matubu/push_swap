@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 12:06:17 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 12:23:03 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 15:44:27 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 
 int		ft_atoi(const char *nptr, int *v);
 int		ft_abs(int v);
+
+int		ft_strlen(const char *s);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strjoin(char *s, char c);
 
 char	**split(const char *s, char c, int *len);
 int		free_splits(char **splits, int n);
@@ -72,7 +76,7 @@ enum e_action {
 	RROTATE_BOTH=	RROTATE | STACK_BOTH,
 };
 
-t_stack	*stacknew(char **input, t_stack	*stack);
+void	stacknew(char **input, int i, t_stack	*stack);
 void	stackclear(t_stack *stack);
 
 void	swap(t_stack *stack, enum e_action on);

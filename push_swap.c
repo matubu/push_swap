@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 12:39:36 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 15:21:48 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ void	sort(t_stack *stack)
 	rmove(stack, lstgetsmallest(stack->a) - 1);
 }
 
-void	push_swap(char **input)
+void	push_swap(char **input, int len)
 {
 	t_stack	stack;
 
-	stacknew(input, &stack);
+	stacknew(input, len, &stack);
 	if (!issorted(stack.a))
 		sort(&stack);
 	optimize_moves(&stack.moves);
@@ -86,7 +86,7 @@ int	main(int argc, char **argv)
 	int		len;
 	char	**input;
 
-	if (argc == 1)
+	if (argc < 2)
 		return (1);
 	len = argc - 1;
 	input = argv + 1;
@@ -94,7 +94,7 @@ int	main(int argc, char **argv)
 		input = split(argv[1], ' ', &len);
 	if (!input || len < 2)
 		return (1);
-	push_swap(input);
+	push_swap(input, len);
 	if (argc == 2)
 		free_splits(input, len);
 	return (0);
