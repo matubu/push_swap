@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 12:10:19 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 12:39:36 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,73 +16,6 @@ void	err(void)
 {
 	write(2, "Error\n", 6);
 	exit(1);
-}
-
-int	mid(t_lst *moves, int n)
-{
-	int	move;
-
-	move = 0;
-	while (n-- && moves)
-	{
-		move |= moves->v << n * 6;
-		moves = moves->next;
-	}
-	return (move);
-}
-
-//remember moves are inverted
-int	optimize_moves(t_lst **moves)
-{
-	int		b;
-
-	b = 0;
-	if (*moves == NULL)
-		return (0);
-	while (optimize_moves(&(*moves)->next))
-		b = 1;
-	if (mid(*moves, 2) == (PUSH_B | PUSH_A << 6) 
-			|| mid(*moves, 2) == (PUSH_A | PUSH_B << 6)
-			|| mid(*moves, 2) == (ROTATE_A | RROTATE_A << 6)
-			|| mid(*moves, 2) == (RROTATE_A | ROTATE_A << 6))
-	{
-		DEBUG(">> usless\n");
-		lstdel(moves);
-		lstdel(moves);
-	}
-	else if (mid(*moves, 3) == (PUSH_B | ROTATE_A << 6 | PUSH_A << 12))
-	{
-		DEBUG(">> pb ra pa\n");
-		lstdel(moves);
-		(*moves)->next->v = SWAP_A;
-		(*moves)->v = ROTATE_A;
-	}
-	else if (mid(*moves, 3) == (ROTATE_A | PUSH_A << 6 | RROTATE_A << 12))
-	{
-		DEBUG(">> ra pa rra\n");
-		lstdel(moves);
-		(*moves)->next->v = PUSH_A;
-		(*moves)->v = SWAP_A;
-	}
-	else if (mid(*moves, 4) == (PUSH_B | SWAP_A << 6 | PUSH_A << 12 | ROTATE_A << 18))
-	{
-		DEBUG(">> pb sa pa ra\n");
-		lstdel(moves);
-		lstdel(moves);
-		(*moves)->next->v = ROTATE_A;
-		(*moves)->v = SWAP_A;
-	}
-	else if (mid(*moves, 4) == (ROTATE_A | PUSH_B << 6 | RROTATE_A << 12 | PUSH_A << 18))
-	{
-		DEBUG(">> ra pb rra pa\n");
-		lstdel(moves);
-		lstdel(moves);
-		lstdel(moves);
-		(*moves)->v = SWAP_A;
-	}
-	else
-		return (b);
-	return (1);
 }
 
 void	print_moves(t_lst *moves)
@@ -106,111 +39,24 @@ void	print_moves(t_lst *moves)
 	write(1, "\n", 1);
 }
 
-# define MAX 81
-# define HALF 40
-
-int	calc(int a, int b, int same)
-{
-	if (same)
-	{
-		if (a > b)
-			return (a);
-		return (b);
-	}
-	return (a + b);
-}
-
-int	getcost(t_stack *stack, int bi)
-	//TODO recursive
-{
-	int	ai;
-	int	mn;
-	int	size;
-	int	backward;
-
-	ai = lstgetclosest(stack->a, lstvat(stack->b, bi));
-	size = lstsize(stack->a);
-	backward = 1;
-	if (ai <= size / 2 && backward--)
-		mn = ai;
-	else
-		mn = size - ai;
-	return (calc(mn, ft_abs(bi), (bi < 0) == backward));
-}
-
-void	find_lower_cost(t_stack *stack)
-{
-	int		c[MAX];
-	int		i;
-	int		j;
-
-	i = -1;
-	while (++i < MAX)
-		c[i] = getcost(stack, i - HALF);
-	i = -1;
-	while (++i < MAX)
-	{
-		j = i;
-		while (++j < MAX)
-			if (c[i] > c[j])
-				break ;
-		if (j == MAX)
-		{
-			if (i < HALF)
-				while (i++ < HALF)
-					rrotate(stack, STACK_B);
-			else if (i > HALF)
-				while (i-- > HALF)
-					rotate(stack, STACK_B);
-			return ;
-		}
-	}
-}
-
-int	isrestsorted(t_lst *lst, int i)
-{
-	if ((*lstlast(&lst))->v > lst->v)
-		return (0);
-	while (lst && --i > 1)
-	{
-		if (lst->next && lst->v < lst->next->v)
-			return (0);
-		lst = lst->next;
-	}
-	return (1);
-}
-
-int	issorted(t_lst *lst)
-{
-	while (lst)
-	{
-		if (lst->next && lst->v > lst->next->v)
-			return (0);
-		lst = lst->next;
-	}
-	return (1);
-}
-
 void	sort(t_stack *stack)
 {
 	int		i;
 	int		closest;
 
-	DEBUG("\t-> 0 (push to stack b)\n");
 	i = lstsize(stack->a);
 	if (i == 3 && stack->a->v > lstvat(stack->a, 1)
-			&& stack->a->v > lstvat(stack->a, 2))
+		&& stack->a->v > lstvat(stack->a, 2))
 		rotate(stack, STACK_A);
 	if (stack->a->v > stack->a->next->v)
 		swap(stack, STACK_A);
 	if (issorted(stack->a))
 		return ;
 	while (i-- > 1)
-		if ((*lstlast(&stack->a))->v > stack->a->v)//smarter push or not + presort
+		if ((*lstlast(&stack->a))->v > stack->a->v)
 			push(stack, STACK_B);
-		else
-			rotate(stack, STACK_A);
-	DEBUG("\t-> 1 (push back to stack a)\n");
+	else
+		rotate(stack, STACK_A);
 	while (stack->b)
 	{
 		if (lstsize(stack->a) > 10)
@@ -219,38 +65,18 @@ void	sort(t_stack *stack)
 		rmove(stack, closest);
 		push(stack, STACK_A);
 	}
-	DEBUG("\t-> 2 (recenter)\n");
 	rmove(stack, lstgetsmallest(stack->a) - 1);
-}
-
-void	write_tab(t_lst *a)
-{
-	while (a)
-	{
-		DEBUG("-> | %i\n", a->v);
-		a = a->next;
-	}
 }
 
 void	push_swap(char **input)
 {
-	t_stack stack;
+	t_stack	stack;
 
-	DEBUG("step 0 (create stack)\n");
 	stacknew(input, &stack);
-	write_tab(stack.a);
-	DEBUG("step 1 (sort)\n");
 	if (!issorted(stack.a))
 		sort(&stack);
-	else
-		DEBUG("already sorted\n");
-	DEBUG("step 2 (optimize)\n");
-	if (DEBUG_MODE)
-		print_moves(stack.moves);
 	optimize_moves(&stack.moves);
-	DEBUG("step 3 (print)\n");
 	print_moves(stack.moves);
-	DEBUG("step 4 (clear)\n");
 	stackclear(&stack);
 }
 

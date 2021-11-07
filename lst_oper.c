@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_oper.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/07 12:16:25 by mberger-          #+#    #+#             */
+/*   Updated: 2021/11/07 13:38:42 by mberger-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void	lstswap(t_lst **a)
@@ -41,3 +53,13 @@ void	lstrrotate(t_lst **a)
 	last->next = elm;
 }
 
+int	issorted(t_lst *lst)
+{
+	while (lst)
+	{
+		if (lst->next && lst->v > lst->next->v)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}

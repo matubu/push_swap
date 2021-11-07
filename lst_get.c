@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_get.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/07 12:12:48 by mberger-          #+#    #+#             */
+/*   Updated: 2021/11/07 12:17:33 by mberger-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 int	lstgetclosest(t_lst *a, int v)
@@ -7,9 +19,7 @@ int	lstgetclosest(t_lst *a, int v)
 	int		best;
 	int		i;
 	int		fv;
-	
-	if (a == NULL)
-		return (0);
+
 	bestdiff = ft_abs(v - a->v);
 	fv = a->v;
 	best = 1;
@@ -35,7 +45,7 @@ int	lstgetsmallest(t_lst *a)
 	int		bestv;
 	int		best;
 	int		i;
-	
+
 	if (a == NULL)
 		return (0);
 	bestv = a->v;
@@ -51,7 +61,6 @@ int	lstgetsmallest(t_lst *a)
 		}
 	}
 	return (best);
-
 }
 
 t_lst	**lstat(t_lst **a, int i)
@@ -84,8 +93,8 @@ int	lstvat(t_lst *a, int i)
 	while (i--)
 		if (a)
 			a = a->next;
-		else
-			break ;
+	else
+		break ;
 	if (a == NULL)
 		return (v);
 	return (a->v);

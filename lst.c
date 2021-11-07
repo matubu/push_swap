@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 15:01:14 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/05 14:15:19 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 12:21:58 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ void	lstclear(t_lst **lst)
 	*lst = NULL;
 }
 
-void	lstdel(t_lst **lst)
+void	lstdeln(t_lst **lst, int n)
 {
 	t_lst	*temp;
 
+	if (n <= 0)
+		return ;
 	temp = (*lst)->next;
 	free(*lst);
 	*lst = temp;
+	lstdeln(lst, --n);
 }

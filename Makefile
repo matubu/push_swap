@@ -1,9 +1,10 @@
 NAME = push_swap
 
-OBJ = bin/push_swap.o bin/split.o bin/lst.o bin/stack.o bin/math.o bin/stack_oper.o bin/lst_oper.o bin/lst_get.o
+SRCS = push_swap split lst stack math stack_oper lst_oper lst_get optimize cost
+OBJ = $(foreach src,$(SRCS),bin/$(src).o)
 
 BIN = bin
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror 
 
 ECHO = echo
 RED = \033[31m

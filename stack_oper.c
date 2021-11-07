@@ -6,13 +6,13 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 13:05:56 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 11:41:24 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 13:39:31 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	push_move(t_stack *stack, enum e_action both, enum e_action act,
+static void	push_move(t_stack *stack, enum e_action both, enum e_action act,
 		enum e_action with)
 {
 	t_lst	*move;
@@ -80,17 +80,4 @@ void	rrotate(t_stack *stack, enum e_action on)
 		lstrrotate(&stack->b);
 	push_move(stack, RROTATE_BOTH, (on & STACK_BOTH) | RROTATE,
 		((on ^ STACK_BOTH) & STACK_BOTH) | RROTATE);
-}
-
-void	rmove(t_stack *stack, int i)
-{
-	int	size;
-
-	size = lstsize(stack->a);
-	if (i <= size / 2)
-		while (i-- > 0)
-			rotate(stack, STACK_A);
-	else
-		while (i++ < size)
-			rrotate(stack, STACK_A);
 }
