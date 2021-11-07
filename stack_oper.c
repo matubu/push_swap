@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 13:05:56 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 09:52:18 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 11:41:24 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	swap(t_stack *stack, enum e_action on)
 	if (on & STACK_B)
 		lstswap(&stack->b);
 	push_move(stack, SWAP_BOTH, (on & STACK_BOTH) | SWAP,
-			((on ^ STACK_BOTH) & STACK_BOTH) | SWAP);
+		((on ^ STACK_BOTH) & STACK_BOTH) | SWAP);
 }
 
 void	push(t_stack *stack, enum e_action on)
@@ -69,7 +69,7 @@ void	rotate(t_stack *stack, enum e_action on)
 	if (on & STACK_B)
 		lstrotate(&stack->b);
 	push_move(stack, ROTATE_BOTH, (on & STACK_BOTH) | ROTATE,
-			((on ^ STACK_BOTH) & STACK_BOTH) | ROTATE);
+		((on ^ STACK_BOTH) & STACK_BOTH) | ROTATE);
 }
 
 void	rrotate(t_stack *stack, enum e_action on)
@@ -79,7 +79,7 @@ void	rrotate(t_stack *stack, enum e_action on)
 	if (on & STACK_B)
 		lstrrotate(&stack->b);
 	push_move(stack, RROTATE_BOTH, (on & STACK_BOTH) | RROTATE,
-			((on ^ STACK_BOTH) & STACK_BOTH) | RROTATE);
+		((on ^ STACK_BOTH) & STACK_BOTH) | RROTATE);
 }
 
 void	rmove(t_stack *stack, int i)
@@ -87,7 +87,7 @@ void	rmove(t_stack *stack, int i)
 	int	size;
 
 	size = lstsize(stack->a);
-	if (i < size  / 2)
+	if (i <= size / 2)
 		while (i-- > 0)
 			rotate(stack, STACK_A);
 	else

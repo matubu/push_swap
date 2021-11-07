@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 12:02:30 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 09:46:21 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 11:40:48 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	mid(t_lst *moves, int n)
 	return (move);
 }
 
-//remember moves are inversed
+//remember moves are inverted
 int	optimize_moves(t_lst **moves)
 {
 	int		b;
@@ -121,6 +121,7 @@ int	calc(int a, int b, int same)
 }
 
 int	getcost(t_stack *stack, int bi)
+	//TODO recursive
 {
 	int	ai;
 	int	mn;
@@ -130,7 +131,7 @@ int	getcost(t_stack *stack, int bi)
 	ai = lstgetclosest(stack->a, lstvat(stack->b, bi));
 	size = lstsize(stack->a);
 	backward = 1;
-	if (ai < size / 2 && backward--)
+	if (ai <= size / 2 && backward--)
 		mn = ai;
 	else
 		mn = size - ai;
@@ -165,10 +166,12 @@ void	find_lower_cost(t_stack *stack)
 		}
 	}
 }
-/*
+
 int	isrestsorted(t_lst *lst, int i)
 {
-	while (lst && i--)
+	if ((*lstlast(&lst))->v > lst->v)
+		return (0);
+	while (lst && --i > 1)
 	{
 		if (lst->next && lst->v < lst->next->v)
 			return (0);
@@ -176,7 +179,7 @@ int	isrestsorted(t_lst *lst, int i)
 	}
 	return (1);
 }
-*/
+
 int	issorted(t_lst *lst)
 {
 	while (lst)
@@ -195,22 +198,18 @@ void	sort(t_stack *stack)
 
 	DEBUG("\t-> 0 (push to stack b)\n");
 	i = lstsize(stack->a);
-	if (i <= 3)
-		i--;
+	if (i == 3 && stack->a->v > lstvat(stack->a, 1)
+			&& stack->a->v > lstvat(stack->a, 2))
+		rotate(stack, STACK_A);
 	if (stack->a->v > stack->a->next->v)
 		swap(stack, STACK_A);
 	if (issorted(stack->a))
 		return ;
-	rotate(stack, STACK_A);//avoid rotate and try swap ...
-	rotate(stack, STACK_A);//avoid rotate and try swap ...
-	while (i-- > 2)
+	while (i-- > 1)
 	{
-		//if (stack->a->v > stack->a->next->v)
-		//	swap(stack, STACK_A);
-		if ((*lstlast(&stack->a))->v > stack->a->v)
+		if ((*lstlast(&stack->a))->v > stack->a->v)//smarter push or not + presort
 			push(stack, STACK_B);
-			//TODO presort
-		else// if (!isrestsorted(stack->a, i))
+		else
 			rotate(stack, STACK_A);
 	}
 	DEBUG("\t-> 1 (push back to stack a)\n");
@@ -224,7 +223,6 @@ void	sort(t_stack *stack)
 	}
 	DEBUG("\t-> 2 (recenter)\n");
 	rmove(stack, lstgetsmallest(stack->a) - 1);
-
 }
 
 void	write_tab(t_lst *a)
@@ -236,32 +234,30 @@ void	write_tab(t_lst *a)
 	}
 }
 
-t_stack	*push_swap(char **input)
+void	push_swap(char **input)
 {
-	t_stack *stack;
+	t_stack stack;
 
 	DEBUG("step 0 (create stack)\n");
-	stack = stacknew(input);
-	write_tab(stack->a);
+	stacknew(input, &stack);
+	write_tab(stack.a);
 	DEBUG("step 1 (sort)\n");
-	if (!issorted(stack->a))
-		sort(stack);
+	if (!issorted(stack.a))
+		sort(&stack);
 	else
 		DEBUG("already sorted\n");
 	DEBUG("step 2 (optimize)\n");
 	if (DEBUG_MODE)
-		print_moves(stack->moves);
-	optimize_moves(&stack->moves);
+		print_moves(stack.moves);
+	optimize_moves(&stack.moves);
 	DEBUG("step 3 (print)\n");
-	print_moves(stack->moves);
+	print_moves(stack.moves);
 	DEBUG("step 4 (clear)\n");
-	stackclear(stack);
-	return (NULL);
+	stackclear(&stack);
 }
 
 //TODO error with double values
-//TODO multiple spaces
-//TODO maxint fail
+//TODO maxint + minint fail
 int	main(int argc, char **argv)
 {
 	int		len;

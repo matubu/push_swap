@@ -6,7 +6,7 @@
 /*   By: mberger- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 12:06:17 by mberger-          #+#    #+#             */
-/*   Updated: 2021/11/07 09:31:39 by mberger-         ###   ########.fr       */
+/*   Updated: 2021/11/07 10:46:52 by mberger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ enum e_action {
 	RROTATE_BOTH=	RROTATE | STACK_BOTH,
 };
 
-t_stack	*stacknew(char **input);
+t_stack	*stacknew(char **input, t_stack	*stack);
 void	stackclear(t_stack *stack);
 
 void	swap(t_stack *stack, enum e_action on);
